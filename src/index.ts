@@ -1,9 +1,22 @@
-import Fastify from "fastify";
+import fastify from "fastify";
 import { readdirSync } from "fs";
-import { prod } from "./utils/constants";
+import { prod } from "./common/constants";
 
-export const server = Fastify({
-    logger: !prod
+const envToLogger = {};
+
+export const server = fastify({
+    logger: {
+        development: {
+            transport: {
+                target: "pino-pretty",
+                options: {
+                    translateTime: "HH:MM:ss Z",
+                    ignore: "pid,hostname"
+                }
+            }
+        },
+        production: false
+    }[process.env.NODE_ENV]
 });
 
 const modules = readdirSync(`./${prod ? "dist" : "src"}/rest`);
