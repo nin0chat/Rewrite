@@ -132,7 +132,7 @@ async function plugin(fst: FastifyInstance, opts) {
             if (process.env.NODE_ENV !== "development")
                 sendEmail([body.email], "Confirm your nin0chat registration", "7111988", {
                     name: body.username,
-                    confirm_url: `https://${req.hostname}/api/confirm?token=${emailToken}`
+                    confirm_url: `https://${req.hostname}/api/confirm?token=${emailConfirmToken}`
                 });
             else {
                 await psqlClient.query("UPDATE users SET activated=true WHERE id=$1", [newUserID]);
