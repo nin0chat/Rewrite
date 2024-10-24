@@ -1,7 +1,9 @@
 <div align="center">
     <img src=".github/logo.png" alt="Logo" width="200" height="200">
-    <h1>🗨️ nin0chat 🗨️</h1>
-    <p>A chat application built with TypeScript, Fastify, and Postgres.</p>
+    <h1>nin0chat</h1>
+    <p>
+        The chat app of all time. Easy to use, simple and open.
+    </p>
 </div>
 
 ---
@@ -15,12 +17,16 @@
 
 ## 🧐 About 
 
-nin0chat is a chat service that allows users to create accounts, send messages, and view messages from other users. This project was built using TypeScript, Fastify, and Postgres. 
+nin0chat is a silly simple chatroom that allows people to easily join just by opening the website and starting to chat. The goal is to have IRC, but better. This project was built using TypeScript, ElysiaJS, and Postgres. 
 
 Thanks to all the contributors who helped make this project possible!
 
-## Self-hosting
+## Get started
 
+As a user: go to https://chat.nin0.dev.
+As a selfhoster:
+<details>
+    <summary>Self-hosting guide</summary>
 To get started with nin0chat, you will need to have the following installed on your machine:
 
 - Node.js
@@ -43,9 +49,16 @@ Once you have filled in the variables, you can run the following command to star
 pnpm dev
 ```
 
-## 🎈 Usage
+or:
 
-To use nin0chat, you can navigate to `http://localhost:3000` (or your specified host and port from your config file) in your browser. From there, you can create an account, log in, and start chatting with other users. 
+```bash
+pnpm build && pnpm start
+```
+
+if you are running a production instance.
+
+You should then be able to access the server on your desired port.
+</details>
 
 ## 📜 License
 
