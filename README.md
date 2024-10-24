@@ -10,9 +10,9 @@
 
 ## 📝 Table of contents
 
-- [About](#about)
-- [Get started](#get_started)
-- [License](#license)
+- [About](#-about)
+- [Get started](#-get-started)
+- [License](#-license)
 
 ## 🧐 About 
 
