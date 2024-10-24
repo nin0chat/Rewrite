@@ -8,11 +8,10 @@
 
 ---
 
-## 📝 Table of Contents
+## 📝 Table of contents
 
 - [About](#about)
-- [Getting Started](#getting_started)
-- [Usage](#usage)
+- [Get started](#get_started)
 - [License](#license)
 
 ## 🧐 About 
@@ -21,7 +20,7 @@ nin0chat is a silly simple chatroom that allows people to easily join just by op
 
 Thanks to all the contributors who helped make this project possible!
 
-## Get started
+## 🚀 Get started
 
 As a user: go to https://chat.nin0.dev.
 As a selfhoster:
