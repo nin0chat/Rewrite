@@ -1,0 +1,6 @@
+*     text eol=lf
+*.bat text eol=crlf
+*.sh  text eol=lf
+
+# Tell Git to handle PNG files correctly
+*.png binary eol=lf

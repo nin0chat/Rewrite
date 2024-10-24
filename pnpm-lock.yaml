@@ -1,0 +1,51 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      elysia:
+        specifier: ^1.1.23
+        version: 1.1.23(@sinclair/typebox@0.33.17)
+
+packages:
+
+  '@sinclair/typebox@0.33.17':
+    resolution: {integrity: sha512-75232GRx3wp3P7NP+yc4nRK3XUAnaQShxTAzapgmQrgs0QvSq0/mOJGoZXRpH15cFCKyys+4laCPbBselqJ5Ag==}
+
+  cookie@0.6.0:
+    resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
+    engines: {node: '>= 0.6'}
+
+  elysia@1.1.23:
+    resolution: {integrity: sha512-N+V5OW/TK/QFPfkcEt5pgOVZQ0/RUZeZI/idlvkCqBBSByhjVyLdOF5IrCTW2UKUm+cKSz+qT0C0n3gxwq/NzA==}
+    peerDependencies:
+      '@sinclair/typebox': '>= 0.32.0'
+      openapi-types: '>= 12.0.0'
+      typescript: '>= 5.0.0'
+    peerDependenciesMeta:
+      openapi-types:
+        optional: true
+      typescript:
+        optional: true
+
+  fast-decode-uri-component@1.0.1:
+    resolution: {integrity: sha512-WKgKWg5eUxvRZGwW8FvfbaH7AXSh2cL+3j5fMGzUMCxWBJ3dV3a7Wz8y2f/uQ0e3B6WmodD3oS54jTQ9HVTIIg==}
+
+snapshots:
+
+  '@sinclair/typebox@0.33.17': {}
+
+  cookie@0.6.0: {}
+
+  elysia@1.1.23(@sinclair/typebox@0.33.17):
+    dependencies:
+      '@sinclair/typebox': 0.33.17
+      cookie: 0.6.0
+      fast-decode-uri-component: 1.0.1
+
+  fast-decode-uri-component@1.0.1: {}
