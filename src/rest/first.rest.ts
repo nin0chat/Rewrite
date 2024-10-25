@@ -18,7 +18,7 @@ export default class ControllerTest {
         if (req.query.name) {
             return `Hello, ${req.query.name}!`;
         }
-        
+
         return "Hello world!";
     }
 
