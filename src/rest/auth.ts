@@ -91,6 +91,7 @@ async function plugin(fst: FastifyInstance, opts) {
                     ErrorCode.ValidationError,
                     "CAPTCHA is expired or invalid"
                 );
+
             // Check for existing info
             if (
                 await psqlClient.query("SELECT id FROM users WHERE username=$1 OR email=$2", [
@@ -104,6 +105,7 @@ async function plugin(fst: FastifyInstance, opts) {
                     ErrorCode.ConflictError,
                     "Username or email are already registered"
                 );
+
             // Moderate username
             if (shouldModerate(body.username).newText !== body.username) {
                 return sendError(
@@ -113,14 +115,17 @@ async function plugin(fst: FastifyInstance, opts) {
                     "Username contains restricted words"
                 );
             }
+
             // Hash password
             const hashedPassword = await hash(body.password, salt);
+
             // Add user to database
             const newUserID = generateID();
             await psqlClient.query(
                 "INSERT INTO users (id, username, email, password)  VALUES ($1, $2, $3, $4)",
                 [newUserID, body.username, body.email, hashedPassword]
             );
+
             // Generate confirm email
             const emailConfirmToken = encodeURIComponent(
                 randomBytes(60).toString("base64").replace("+", "")
@@ -156,6 +161,7 @@ async function plugin(fst: FastifyInstance, opts) {
         },
         async function handler(request, res) {
             const token = (request.query as any).token;
+
             // Check if token is valid
             const query = await psqlClient.query(
                 "SELECT id FROM email_verifications WHERE token=$1",
@@ -164,6 +170,7 @@ async function plugin(fst: FastifyInstance, opts) {
             if (query.rows.length === 0) {
                 return sendError(res, "rest", ErrorCode.DataError, "Invalid verify token");
             }
+
             // Delete token
             await psqlClient.query("DELETE FROM email_verifications WHERE token=$1", [token]);
             await psqlClient.query("UPDATE users SET activated=true WHERE id=$1", [

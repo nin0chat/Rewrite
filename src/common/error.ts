@@ -8,6 +8,7 @@ export enum ErrorCode {
     ConflictError,
     PermissionError
 }
+
 export function sendError(
     res: FastifyReply,
     location: "ws" | "rest",
@@ -40,12 +41,12 @@ export function sendError(
             }
             default: {
                 res.code(400);
-                return {
-                    code,
-                    message
-                };
             }
         }
+        return {
+            code,
+            message
+        };
     } else {
         return {}; // tbd
     }
