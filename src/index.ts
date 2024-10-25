@@ -2,9 +2,6 @@ import fastify from "fastify";
 import { readdirSync } from "fs";
 import { prod } from "./common/constants";
 
-const envToLogger = {};
-const { SERVER_HOST, SERVER_PORT } = process.env;
-
 export const server = fastify({
     logger: {
         development: {
@@ -28,10 +25,10 @@ for (const module of modules) {
     });
 }
 
-server.listen({ port: Number(SERVER_PORT), host: SERVER_HOST }, (err, address) => {
+server.listen({ port: parseInt(process.env.PORT), host: process.env.HOST }, (err, address) => {
     if (err) {
         server.log.error(err);
     }
 
-    server.log.info(`Server listening at ${address}:${SERVER_PORT}`);
+    server.log.info(`Server listening at ${address}:${process.env.PORT}`);
 });
