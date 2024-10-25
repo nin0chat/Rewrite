@@ -28,5 +28,4 @@ export async function sendEmail(
         })
     });
     const r = await q.json();
-    console.log(r);
 }
