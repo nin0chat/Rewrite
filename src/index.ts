@@ -4,6 +4,7 @@ import { prod } from "./common/constants";
 import "dotenv/config";
 
 const envToLogger = {};
+const { SERVER_HOST, SERVER_PORT } = process.env;
 
 export const server = fastify({
     logger: {
@@ -28,8 +29,10 @@ for (const module of modules) {
     });
 }
 
-server.listen({ port: 3000 }, (err, address) => {
+server.listen({ port: Number(SERVER_PORT), host: SERVER_HOST }, (err, address) => {
     if (err) {
         server.log.error(err);
     }
+
+    server.log.info(`Server listening at ${address}:${SERVER_PORT}`);
 });
