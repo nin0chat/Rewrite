@@ -10,6 +10,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-            - run: npm ci
+            - run: pnpm ci
             - run: ls ./{,node_modules/{,.bin/}}
             - run: node_modules/.bin/prettier --check
