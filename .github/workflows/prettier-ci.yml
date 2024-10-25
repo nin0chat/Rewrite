@@ -13,4 +13,4 @@ jobs:
             - run: npm i -g pnpm
             - run: pnpm i
             - run: ls ./{,node_modules/{,.bin/}}
-            - run: node_modules/.bin/prettier --check
+            - run: node_modules/.bin/prettier --check .
