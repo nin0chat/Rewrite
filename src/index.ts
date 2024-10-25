@@ -2,6 +2,12 @@ import fastify from "fastify";
 import { readdirSync } from "fs";
 import { prod } from "./common/constants";
 
+import { resolve } from "path";
+import { bootstrap } from "fastify-decorators";
+
+const envToLogger = {};
+const { SERVER_HOST, SERVER_PORT } = process.env;
+
 export const server = fastify({
     logger: {
         development: {
@@ -17,13 +23,10 @@ export const server = fastify({
     }[process.env.NODE_ENV]
 });
 
-const modules = readdirSync(`./${prod ? "dist" : "src"}/rest`);
-for (const module of modules) {
-    server.log.info(`Loading ${module}`);
-    server.register(import(`./rest/${module.replace(".ts", "")}`), {
-        prefix: `/api/${module.replace(".ts", "")}`
-    });
-}
+server.register(bootstrap, {
+    directory: resolve(__dirname, "rest"),
+    mask: /\.rest\./
+});
 
 server.listen({ port: parseInt(process.env.PORT), host: process.env.HOST }, (err, address) => {
     if (err) {
