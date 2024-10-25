@@ -1,9 +1,9 @@
-import { prod } from "./constants";
+import { captchaVerifyEndpoint, isDev } from "./constants";
 
 export async function validateCaptcha(response: string): Promise<boolean> {
-    if (!prod) return true;
+    if (isDev) return true;
 
-    const { success } = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    const { success } = await fetch(captchaVerifyEndpoint, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

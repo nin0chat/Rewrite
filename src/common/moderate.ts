@@ -49,7 +49,9 @@ const badNounsReplacements = [
     "ultrakill"
 ];
 
-// WARN: All entries in this array must be regexes. All regexes will have /gu applied to them — manually-specified flags will be ignored!
+/**
+ * @warning All entries in this array must be regexes. All regexes will have /gu applied to them — manually-specified flags will be ignored!
+ */
 const bannedWords: RegExp[] = [
     /cunt/,
     /whore/,
@@ -86,6 +88,7 @@ const badWordsRegex = new RegExp(
     "\\b(" + bannedWords.map((regex) => regex.source).join("|") + ")\\b",
     "gi"
 );
+
 function replaceBadWords(content: string): string {
     return content.replace(badWordsRegex, function (match) {
         const randomIndex = Math.floor(Math.random() * badNounsReplacements.length);
@@ -93,9 +96,9 @@ function replaceBadWords(content: string): string {
     });
 }
 
-export function moderateMessage(message: string) {
+export function shouldModerate(text: string) {
     return {
         block: false,
-        newMessageContent: replaceBadWords(message)
+        newText: replaceBadWords(text)
     };
 }

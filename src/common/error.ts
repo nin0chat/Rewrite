@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 
-export enum ErrorCodes {
+export enum ErrorCode {
     ValidationError,
     AuthError,
     MessageError,
@@ -11,27 +11,27 @@ export enum ErrorCodes {
 export function sendError(
     res: FastifyReply,
     location: "ws" | "rest",
-    code: ErrorCodes,
+    code: ErrorCode,
     message: string,
     extra: any = {}
 ): object {
     if (location === "rest") {
         switch (code) {
-            case ErrorCodes.ValidationError: {
+            case ErrorCode.ValidationError: {
                 res.code(400);
                 return {
                     code,
                     message
                 };
             }
-            case ErrorCodes.AuthError: {
+            case ErrorCode.AuthError: {
                 res.code(403);
                 return {
                     code,
                     message
                 };
             }
-            case ErrorCodes.ConflictError: {
+            case ErrorCode.ConflictError: {
                 res.code(409);
                 return {
                     code,

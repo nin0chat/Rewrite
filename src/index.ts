@@ -1,6 +1,6 @@
 import fastify from "fastify";
 import { readdirSync } from "fs";
-import { prod } from "./common/constants";
+import { isDev } from "./common/constants";
 
 import { resolve } from "path";
 import { bootstrap } from "fastify-decorators";

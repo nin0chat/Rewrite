@@ -1,7 +1,7 @@
 import { compare, genSalt, hash } from "bcrypt";
 import { psqlClient } from "./database";
-import { sendError, ErrorCodes } from "./error";
-import { User } from "./types";
+import { sendError, ErrorCode } from "./error";
+import { Token, User } from "./types";
 import { randomBytes } from "crypto";
 import { salt } from "./constants";
 
@@ -39,10 +39,20 @@ export async function checkCredentials(
     };
 }
 
-export async function addToken(userID: bigint): Promise<string> {
+export async function generateToken(userID: bigint, addToDatabase: boolean): Promise<Token> {
     const token = randomBytes(60).toString("base64").replace("+", "");
     const hashedToken = await hash(token, salt);
     const seed = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-    await psqlClient.query("INSERT INTO tokens VALUES ($1, $2, $3)", [userID, seed, hashedToken]);
-    return `${userID}.${seed}.${token}`;
+    if (addToDatabase)
+        await psqlClient.query("INSERT INTO tokens VALUES ($1, $2, $3)", [
+            userID,
+            seed,
+            hashedToken
+        ]);
+    return {
+        userID,
+        seed,
+        token,
+        full: `${userID}.${seed}.${token}`
+    };
 }

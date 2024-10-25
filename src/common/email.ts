@@ -1,3 +1,5 @@
+import { isDev } from "./constants";
+
 export async function sendEmail(
     to: string[],
     subject: string,
@@ -7,7 +9,7 @@ export async function sendEmail(
 ) {
     console.log(`Sending email to ${to} with ${bcc} with template ${template_id}`);
 
-    if (process.env.NODE_ENV === "development" && !process.env.SMTP2GO_KEY) {
+    if (isDev && !process.env.SMTP2GO_KEY) {
         return;
     }
 
@@ -27,5 +29,4 @@ export async function sendEmail(
             template_data
         })
     });
-    const r = await q.json();
 }
