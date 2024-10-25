@@ -11,6 +11,6 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - run: npm i -g pnpm
-            - run: pnpm ci
+            - run: pnpm i
             - run: ls ./{,node_modules/{,.bin/}}
             - run: node_modules/.bin/prettier --check
