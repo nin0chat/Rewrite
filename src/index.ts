@@ -25,7 +25,8 @@ export const server = fastify({
 
 server.register(bootstrap, {
     directory: resolve(__dirname, "rest"),
-    mask: /\.rest\./
+    mask: /\.rest\./,
+    prefix: "/api"
 });
 
 server.listen({ port: parseInt(process.env.PORT), host: process.env.HOST }, (err, address) => {
