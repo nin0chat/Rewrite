@@ -1,4 +1,6 @@
 import Fastify, { FastifyInstance } from "fastify";
+import { Controller, GET } from "fastify-decorators";
+
 import { ErrorCodes, sendError } from "../common/error";
 import { psqlClient } from "../common/database";
 import { compare, genSalt, hash } from "bcrypt";

@@ -13,8 +13,14 @@ export async function checkCredentials(
     id?: bigint;
     error?: "invalidCredentials" | "invalidTOTP" | "accountNotActivated";
 }> {
-    const potentialUser = (await psqlClient.query("SELECT * FROM users WHERE email=$1", [email]))
-        .rows[0] as User;
+    const userQuery = await psqlClient.query("SELECT * FROM users WHERE email=$1", [email]);
+    if (!userQuery.rowCount)
+        return {
+            success: false,
+            error: "invalidCredentials"
+        };
+    const potentialUser: User = userQuery.rows[0];
+
     const auth = await compare(password, potentialUser.password);
     if (!auth) {
         return {

@@ -2,7 +2,7 @@ import { Controller, GET } from "fastify-decorators";
 
 @Controller({ route: "/" })
 export default class ControllerTest {
-    @GET({ 
+    @GET({
         url: "/hello",
         options: {
             schema: {
@@ -14,11 +14,12 @@ export default class ControllerTest {
             }
         }
     })
-    async helloHandler() {
+    async helloHandler(req, res) {
+        console.log(res);
         return "Hello world!";
     }
 
-    @GET({ 
+    @GET({
         url: "/goodbye",
         options: {
             schema: {
@@ -28,7 +29,7 @@ export default class ControllerTest {
                     }
                 }
             }
-        } 
+        }
     })
     async goodbyeHandler() {
         return "Bye-bye!";
