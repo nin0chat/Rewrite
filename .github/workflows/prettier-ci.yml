@@ -1,15 +1,15 @@
 name: Prettier CI
 
 on:
-  push:
-  pull_request:
-  workflow_dispatch:
+    push:
+    pull_request:
+    workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    - run: npm ci
-    - run: ls ./{,node_modules/{,.bin/}}
-    - run: node_modules/.bin/prettier --check
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - run: npm ci
+            - run: ls ./{,node_modules/{,.bin/}}
+            - run: node_modules/.bin/prettier --check
