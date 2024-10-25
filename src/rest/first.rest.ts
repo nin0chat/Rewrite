@@ -15,7 +15,10 @@ export default class ControllerTest {
         }
     })
     async helloHandler(req, res) {
-        console.log(res);
+        if (req.query.name) {
+            return `Hello, ${req.query.name}!`;
+        }
+        
         return "Hello world!";
     }
 
@@ -31,7 +34,27 @@ export default class ControllerTest {
             }
         }
     })
-    async goodbyeHandler() {
+    async goodbyeHandler(req, res) {
+        if (req.query.name) {
+            return `Goodbye, ${req.query.name}!`;
+        }
+
         return "Bye-bye!";
+    }
+
+    @GET({
+        url: "/hello/:name",
+        options: {
+            schema: {
+                response: {
+                    200: {
+                        type: "string"
+                    }
+                }
+            }
+        }
+    })
+    async nameHandler(req, res) {
+        return `Hello, ${req.params.name}!`;
     }
 }
