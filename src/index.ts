@@ -1,7 +1,6 @@
 import fastify from "fastify";
 import { readdirSync } from "fs";
 import { prod } from "./common/constants";
-import "dotenv/config";
 
 const envToLogger = {};
 const { SERVER_HOST, SERVER_PORT } = process.env;
