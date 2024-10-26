@@ -104,5 +104,5 @@ export function moderateMessage(text: string) {
 }
 
 export function shouldModerate(text: string) {
-    return moderateMessage(text).newText !== text
+    return moderateMessage(text).newText !== text;
 }

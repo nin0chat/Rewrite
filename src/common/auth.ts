@@ -5,10 +5,7 @@ import { psqlClient } from "./database";
 import { ErrorCode, RESTError } from "./error";
 import { Token, User } from "./types";
 
-export async function checkCredentials(
-    email: string,
-    password: string
-): Promise<bigint> {
+export async function checkCredentials(email: string, password: string): Promise<bigint> {
     const userQuery = await psqlClient.query("SELECT * FROM users WHERE email=$1", [email]);
     if (!userQuery.rowCount)
         throw new RESTError(ErrorCode.AuthError, "Invalid username or password");

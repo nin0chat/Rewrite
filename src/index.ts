@@ -1,9 +1,9 @@
-import 'dotenv/config.js';
+import "dotenv/config.js";
 import fastify from "fastify";
 
 import { bootstrap } from "fastify-decorators";
 import { resolve } from "path";
-import { ERROR_HANDLER } from './common/error.js';
+import { ERROR_HANDLER } from "./common/error.js";
 
 export const server = fastify({
     logger: {
@@ -25,7 +25,7 @@ server.register(bootstrap, {
     prefix: "/api"
 });
 
-server.setErrorHandler(ERROR_HANDLER)
+server.setErrorHandler(ERROR_HANDLER);
 
 server.listen({ port: parseInt(process.env.PORT), host: process.env.HOST }, (err, address) => {
     if (err) {

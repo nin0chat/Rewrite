@@ -17,7 +17,7 @@ export enum ErrorCode {
  */
 export abstract class APIError extends Error {
     abstract location: "ws" | "rest";
-    abstract extra: Record<string, any> & { validation?: any; stack?: string; };
+    abstract extra: Record<string, any> & { validation?: any; stack?: string };
     abstract statusCode: number;
 
     constructor(
@@ -75,8 +75,8 @@ export class SocketError extends APIError {
         super(code, message);
     }
 
-    statusCode = 500
-    message = "Internal Server Error"
+    statusCode = 500;
+    message = "Internal Server Error";
 }
 
 /**

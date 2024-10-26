@@ -43,9 +43,8 @@ export default class AuthController {
         const body = req.body as LoginBody;
         const auth = await checkCredentials(body.email, body.password);
 
-            return { token: await generateToken(auth, true) };
+        return { token: await generateToken(auth, true) };
     }
-
 
     @POST({
         url: "/signup",
@@ -67,7 +66,7 @@ export default class AuthController {
     async signupHandler(req, res) {
         const body = req.body as SignupBody;
         if (!(await validateCaptcha(body.turnstileKey)))
-           throw new RESTError(ErrorCode.ValidationError, "Invalid captcha");
+            throw new RESTError(ErrorCode.ValidationError, "Invalid captcha");
 
         // Check for existing info
         if (
@@ -79,7 +78,7 @@ export default class AuthController {
             throw new RESTError(ErrorCode.ConflictError, "Username or email already exists");
 
         // Moderate username
-        if (shouldModerate(body.username)) 
+        if (shouldModerate(body.username))
             throw new RESTError(ErrorCode.ValidationError, "Username contains restricted words");
 
         // Hash password
@@ -129,18 +128,14 @@ export default class AuthController {
         const token = (req.query as any).token;
 
         // Check if token is valid
-        const query = await psqlClient.query(
-            "SELECT id FROM email_verifications WHERE token=$1",
-            [token]
-        );
-        if (query.rows.length === 0) 
-            throw new RESTError(ErrorCode.NotFoundError, "Invalid token");
+        const query = await psqlClient.query("SELECT id FROM email_verifications WHERE token=$1", [
+            token
+        ]);
+        if (query.rows.length === 0) throw new RESTError(ErrorCode.NotFoundError, "Invalid token");
 
         // Delete token
         await psqlClient.query("DELETE FROM email_verifications WHERE token=$1", [token]);
-        await psqlClient.query("UPDATE users SET activated=true WHERE id=$1", [
-            query.rows[0].id
-        ]);
+        await psqlClient.query("UPDATE users SET activated=true WHERE id=$1", [query.rows[0].id]);
         return res.redirect(`https://${process.env.CLIENT_HOSTNAME}/login?confirmed=true`);
     }
 }
