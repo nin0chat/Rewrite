@@ -9,9 +9,9 @@ import { generateToken, checkCredentials } from "../common/auth";
 import { validateCaptcha } from "../common/captcha";
 import { shouldModerate } from "../common/moderate";
 import { isDev, salt } from "../common/constants";
-import { generateID } from "../common/ids";
 import { randomBytes } from "crypto";
 import { sendEmail } from "../common/email";
+import { Snowflake } from "../common/Snowflake";
 
 type LoginBody = {
     email: string;
@@ -120,7 +120,7 @@ async function plugin(fst: FastifyInstance, opts) {
             const hashedPassword = await hash(body.password, salt);
 
             // Add user to database
-            const newUserID = generateID();
+            const newUserID = Snowflake.generate();
             await psqlClient.query(
                 "INSERT INTO users (id, username, email, password)  VALUES ($1, $2, $3, $4)",
                 [newUserID, body.username, body.email, hashedPassword]
