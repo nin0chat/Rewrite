@@ -96,9 +96,13 @@ function replaceBadWords(content: string): string {
     });
 }
 
-export function shouldModerate(text: string) {
+export function moderateMessage(text: string) {
     return {
         block: false,
         newText: replaceBadWords(text)
     };
+}
+
+export function shouldModerate(text: string) {
+    return moderateMessage(text).newText !== text
 }

@@ -1,6 +1,5 @@
 // @ts-nocheck
 import * as cluster from "cluster";
-("use strict");
 
 export class Snowflake {
     static readonly EPOCH = 1729373102932n; // Sat, 26 Oct 2024 00:19:47 UTC

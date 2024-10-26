@@ -1,47 +1,33 @@
-import { compare, genSalt, hash } from "bcrypt";
-import { psqlClient } from "./database";
-import { sendError, ErrorCode } from "./error";
-import { Token, User } from "./types";
+import { compare, hash } from "bcrypt";
 import { randomBytes } from "crypto";
-import { salt } from "./constants";
+import { SALT } from "./constants";
+import { psqlClient } from "./database";
+import { ErrorCode, RESTError } from "./error";
+import { Token, User } from "./types";
 
 export async function checkCredentials(
     email: string,
     password: string
-): Promise<{
-    success: boolean;
-    id?: bigint;
-    error?: "invalidCredentials" | "invalidTOTP" | "accountNotActivated";
-}> {
+): Promise<bigint> {
     const userQuery = await psqlClient.query("SELECT * FROM users WHERE email=$1", [email]);
     if (!userQuery.rowCount)
-        return {
-            success: false,
-            error: "invalidCredentials"
-        };
+        throw new RESTError(ErrorCode.AuthError, "Invalid username or password");
+
     const potentialUser: User = userQuery.rows[0];
 
     const auth = await compare(password, potentialUser.password);
     if (!auth) {
-        return {
-            success: false,
-            error: "invalidCredentials"
-        };
+        throw new RESTError(ErrorCode.AuthError, "Invalid username or password");
     }
     if (!potentialUser.activated)
-        return {
-            success: false,
-            error: "accountNotActivated"
-        };
-    return {
-        success: true,
-        id: potentialUser.id
-    };
+        throw new RESTError(ErrorCode.AuthError, "Check your email to activate your account");
+
+    return potentialUser.id;
 }
 
 export async function generateToken(userID: bigint, addToDatabase: boolean): Promise<Token> {
     const token = randomBytes(60).toString("base64").replace("+", "");
-    const hashedToken = await hash(token, salt);
+    const hashedToken = await hash(token, SALT);
     const seed = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
     if (addToDatabase)
         await psqlClient.query("INSERT INTO tokens VALUES ($1, $2, $3)", [

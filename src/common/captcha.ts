@@ -1,9 +1,9 @@
-import { captchaVerifyEndpoint, isDev } from "./constants";
+import { __DEV__, CAPTCHA_VERIFY_ENDPOINT } from "./constants";
 
 export async function validateCaptcha(response: string): Promise<boolean> {
-    if (isDev) return true;
+    if (__DEV__) return true;
 
-    const { success } = await fetch(captchaVerifyEndpoint, {
+    const { success } = await fetch(CAPTCHA_VERIFY_ENDPOINT, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

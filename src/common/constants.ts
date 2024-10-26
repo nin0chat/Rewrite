@@ -1,5 +1,7 @@
 import { genSaltSync } from "bcrypt";
 
-export const salt = genSaltSync(10);
-export const isDev = process.env.NODE_ENV !== "production";
-export const captchaVerifyEndpoint = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+// is this supposed to be generated each time a password is hashed?
+export const SALT = genSaltSync(10);
+
+export const __DEV__ = process.env.NODE_ENV === "development";
+export const CAPTCHA_VERIFY_ENDPOINT = "https://challenges.cloudflare.com/turnstile/v0/siteverify";

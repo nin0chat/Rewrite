@@ -1,12 +1,9 @@
+import 'dotenv/config.js';
 import fastify from "fastify";
-import { readdirSync } from "fs";
-import { isDev } from "./common/constants";
 
-import { resolve } from "path";
 import { bootstrap } from "fastify-decorators";
-
-const envToLogger = {};
-const { SERVER_HOST, SERVER_PORT } = process.env;
+import { resolve } from "path";
+import { ERROR_HANDLER } from './common/error.js';
 
 export const server = fastify({
     logger: {
@@ -25,14 +22,13 @@ export const server = fastify({
 
 server.register(bootstrap, {
     directory: resolve(__dirname, "rest"),
-    mask: /\.rest\./,
     prefix: "/api"
 });
+
+server.setErrorHandler(ERROR_HANDLER)
 
 server.listen({ port: parseInt(process.env.PORT), host: process.env.HOST }, (err, address) => {
     if (err) {
         server.log.error(err);
     }
-
-    server.log.info(`Server listening at ${address}:${process.env.PORT}`);
 });

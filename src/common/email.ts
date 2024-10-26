@@ -1,4 +1,4 @@
-import { isDev } from "./constants";
+import { __DEV__ } from "./constants";
 
 export async function sendEmail(
     to: string[],
@@ -9,7 +9,7 @@ export async function sendEmail(
 ) {
     console.log(`Sending email to ${to} with ${bcc} with template ${template_id}`);
 
-    if (isDev && !process.env.SMTP2GO_KEY) {
+    if (__DEV__ && !process.env.SMTP2GO_KEY) {
         return;
     }
 
