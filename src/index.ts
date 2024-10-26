@@ -21,6 +21,7 @@ export const server = fastify({
 
 server.register(bootstrap, {
     directory: resolve(__dirname, "rest"),
+    mask: /\.rest\./,
     prefix: "/api"
 });
 
