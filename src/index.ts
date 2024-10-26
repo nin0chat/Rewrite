@@ -12,7 +12,7 @@ export const server = fastify({
 
 server.register(bootstrap, {
     directory: resolve(__dirname, "rest"),
-    mask: RegExp(/\.(js|ts)$/),
+    mask: /^(?!_example\.ts$).*\.(js|ts)$/,
     prefix: "/api"
 });
 
