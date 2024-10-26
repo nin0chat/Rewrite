@@ -7,12 +7,12 @@ import { ERROR_HANDLER } from "./common/error.js";
 import { Yapper } from "./common/Yapper.js";
 
 export const server = fastify({
-    loggerInstance: new Yapper("a")
+    loggerInstance: new Yapper()
 });
 
 server.register(bootstrap, {
     directory: resolve(__dirname, "rest"),
-    mask: /\.rest\./,
+    mask: RegExp(/\.(js|ts)$/),
     prefix: "/api"
 });
 
