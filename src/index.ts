@@ -1,4 +1,3 @@
-import "dotenv/config.js";
 import fastify from "fastify";
 
 import { bootstrap } from "fastify-decorators";
