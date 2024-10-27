@@ -23,14 +23,14 @@ server.decorateRequest("user", null);
 server.addHook("preHandler", authHook);
 
 // what is this for? - splatter
-if (__DEV__) {
-    server.log.trace("Trace message");
-    server.log.debug("Debug message");
-    server.log.info("Info message");
-    server.log.warn("Warn message");
-    server.log.error("Error message");
-    server.log.fatal("I killed myself");
-}
+// if (__DEV__) {
+//     server.log.trace("Trace message");
+//     server.log.debug("Debug message");
+//     server.log.info("Info message");
+//     server.log.warn("Warn message");
+//     server.log.error("Error message");
+//     server.log.fatal("I killed myself");
+// }
 
 server.listen({ port: parseInt(process.env.PORT), host: process.env.HOST }, (err, address) => {
     if (err) {
