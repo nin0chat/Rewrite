@@ -43,7 +43,10 @@ export default class AuthController {
         const body = req.body as LoginBody;
         const auth = await checkCredentials(body.email, body.password);
 
-        return { token: await generateToken(auth, true) };
+        return {
+            id: auth,
+            token: (await generateToken(auth, true)).full
+        };
     }
 
     @POST({
