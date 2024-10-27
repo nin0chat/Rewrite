@@ -8,6 +8,12 @@ export type User = {
     role: number;
 };
 
+export const sanitiseUser = (user: User): User => {
+    const { password, ...sanitised } = user;
+
+    return sanitised;
+};
+
 export type Token = {
     userID: bigint;
     seed: number;

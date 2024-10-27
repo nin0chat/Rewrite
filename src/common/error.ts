@@ -62,6 +62,8 @@ export class RESTError extends APIError {
                 return 500;
         }
     }
+
+    static Authed = new RESTError(ErrorCode.AuthError, "Must be authenticated");
 }
 
 export class SocketError extends APIError {

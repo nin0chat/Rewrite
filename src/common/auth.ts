@@ -1,5 +1,6 @@
 import { compare, hash } from "bcrypt";
 import { randomBytes } from "crypto";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { SALT } from "./constants";
 import { psqlClient } from "./database";
 import { ErrorCode, RESTError } from "./error";
@@ -26,8 +27,9 @@ export async function generateToken(userID: bigint, addToDatabase: boolean): Pro
     const token = randomBytes(60).toString("base64").replace("+", "");
     const hashedToken = await hash(token, SALT);
     const seed = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+
     if (addToDatabase)
-        await psqlClient.query("INSERT INTO tokens VALUES ($1, $2, $3)", [
+        await psqlClient.query("INSERT INTO tokens (id, seed, token) VALUES ($1, $2, $3)", [
             userID,
             seed,
             hashedToken
@@ -36,6 +38,45 @@ export async function generateToken(userID: bigint, addToDatabase: boolean): Pro
         userID,
         seed,
         token,
+        // FIXME: why is this a string if the whole thing is provided? -- splatter
         full: `${userID}.${seed}.${token}`
     };
+}
+
+export const authHook = async (req: FastifyRequest, reply: FastifyReply) => {
+    const auth = req.headers.authorization;
+
+    if (!auth) return;
+
+    const [userID, seed, token] = auth.split(".");
+
+    const tokenQuery = await psqlClient.query("SELECT * FROM tokens WHERE id=$1 AND seed=$2", [
+        userID,
+        seed
+    ]);
+    if (!tokenQuery.rowCount) {
+        throw new RESTError(ErrorCode.AuthError, "Invalid token");
+    }
+
+    const potentialToken = tokenQuery.rows[0];
+
+    const authed = await compare(token, potentialToken.token);
+
+    if (!authed) {
+        throw new RESTError(ErrorCode.AuthError, "Invalid token");
+    }
+
+    const user = await psqlClient.query("SELECT * FROM users WHERE id=$1", [userID]);
+
+    if (!user.rowCount) {
+        throw new RESTError(ErrorCode.AuthError, "Invalid token");
+    }
+
+    req.user = user.rows[0];
+};
+
+declare module "fastify" {
+    interface FastifyRequest {
+        user: User;
+    }
 }

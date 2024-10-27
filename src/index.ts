@@ -2,6 +2,7 @@ import fastify from "fastify";
 
 import { bootstrap } from "fastify-decorators";
 import { resolve } from "path";
+import { authHook } from "./common/auth.js";
 import { __DEV__ } from "./common/constants.js";
 import { ERROR_HANDLER } from "./common/error.js";
 import { Yapper } from "./common/Yapper.js";
@@ -18,6 +19,10 @@ server.register(bootstrap, {
 
 server.setErrorHandler(ERROR_HANDLER);
 
+server.decorateRequest("user", null);
+server.addHook("preHandler", authHook);
+
+// what is this for? - splatter
 if (__DEV__) {
     server.log.trace("Trace message");
     server.log.debug("Debug message");

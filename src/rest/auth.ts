@@ -68,13 +68,13 @@ export default class AuthController {
         if (!(await validateCaptcha(body.turnstileKey)))
             throw new RESTError(ErrorCode.ValidationError, "Invalid captcha");
 
+        const existing = await psqlClient.query(
+            "SELECT id FROM users WHERE username=$1 OR email=$2",
+            [body.username, body.email]
+        );
+
         // Check for existing info
-        if (
-            await psqlClient.query("SELECT id FROM users WHERE username=$1 OR email=$2", [
-                body.username,
-                body.email
-            ])
-        )
+        if (existing.rowCount)
             throw new RESTError(ErrorCode.ConflictError, "Username or email already exists");
 
         // Moderate username
