@@ -10,13 +10,13 @@
 
 ## 📝 Table of contents
 
-- [About](#-about)
-- [Get started](#-get-started)
-- [License](#-license)
+-   [About](#-about)
+-   [Get started](#-get-started)
+-   [License](#-license)
 
-## 🧐 About 
+## 🧐 About
 
-nin0chat is a silly simple chatroom that allows people to easily join just by opening the website and starting to chat. The goal is to have IRC, but better. This project was built using TypeScript, ElysiaJS, and Postgres. 
+nin0chat is a silly simple chatroom that allows people to easily join just by opening the website and starting to chat. The goal is to have IRC, but better. This project was built using TypeScript, Fastify, and Postgres.
 
 Thanks to all the contributors who helped make this project possible!
 
@@ -24,13 +24,14 @@ Thanks to all the contributors who helped make this project possible!
 
 As a user: go to https://chat.nin0.dev.
 As a selfhoster:
+
 <details>
     <summary>Self-hosting guide</summary>
 To get started with nin0chat, you will need to have the following installed on your machine:
 
-- Node.js
-- pnpm
-- Postgres
+-   Node.js
+-   pnpm
+-   Postgres
 
 Once you have the above installed, you can clone the repository and install the dependencies:
 
@@ -57,6 +58,7 @@ pnpm build && pnpm start
 if you are running a production instance.
 
 You should then be able to access the server on your desired port.
+
 </details>
 
 ## 📜 License
