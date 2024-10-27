@@ -38,7 +38,6 @@ export async function generateToken(userID: bigint, addToDatabase: boolean): Pro
         userID,
         seed,
         token,
-        // FIXME: why is this a string if the whole thing is provided? -- splatter
         full: `${userID}.${seed}.${token}`
     };
 }
