@@ -14,7 +14,7 @@ model User {
   email     String? @unique
   password  String?
   activated Boolean @default(false)
-  role      BigInt  @default(2)
+  role      Int     @default(2)
   bot       Boolean @default(false)
   bots      Bot[]   @relation("bot_owner")
   bot_info  Bot?    @relation("bot_user_connection")
@@ -47,7 +47,8 @@ model EmailVerification {
 }
 
 model KLine {
-  user_id BigInt  @id
+  id      Int     @id @default(autoincrement())
+  user_id BigInt?
   ip      String?
   reason  String?
 

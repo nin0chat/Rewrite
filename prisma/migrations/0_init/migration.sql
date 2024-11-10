@@ -1,20 +1,20 @@
 CREATE TABLE IF NOT EXISTS botguilds (
-    channel_id TEXT PRIMARY KEY,
+    channel_id TEXT NOT NULL,
     guild_id   TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS bots (
-    id       TEXT PRIMARY KEY,
+    id       TEXT NOT NULL,
     owner_id TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS email_verifications (
-    id    TEXT PRIMARY KEY,
+    id    TEXT NOT NULL,
     token TEXT
 );
 
 CREATE TABLE IF NOT EXISTS klines (
-    user_id TEXT PRIMARY KEY,
+    user_id TEXT,
     ip      TEXT,
     reason  TEXT
 );
@@ -22,11 +22,11 @@ CREATE TABLE IF NOT EXISTS klines (
 CREATE TABLE IF NOT EXISTS tokens (
     id    TEXT NOT NULL,
     token TEXT NOT NULL,
-    seed  TEXT PRIMARY KEY
+    seed  TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS users (
-    id        TEXT PRIMARY KEY,
+    id        TEXT NOT NULL,
     username  TEXT NOT NULL,
     pfp       TEXT,
     email     TEXT,
