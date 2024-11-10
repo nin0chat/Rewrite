@@ -41,7 +41,7 @@ model Token {
 
 model EmailVerification {
   id    BigInt  @id
-  token String?
+  token String? @unique
 
   @@map("email_verifications")
 }
