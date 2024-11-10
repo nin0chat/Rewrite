@@ -4,7 +4,7 @@ import { Controller, GET, POST } from "fastify-decorators";
 import { checkCredentials, generateToken } from "../common/auth";
 import { validateCaptcha } from "../common/captcha";
 import { __DEV__, SALT } from "../common/constants";
-import { psqlClient } from "../common/database";
+import { prismaClient } from "../common/database";
 import { sendEmail } from "../common/email";
 import { ErrorCode, RESTError } from "../common/error";
 import { shouldModerate } from "../common/moderate";
@@ -44,7 +44,7 @@ export default class AuthController {
         const auth = await checkCredentials(body.email, body.password);
 
         return {
-            id: auth,
+            id: auth.toString(),
             token: (await generateToken(auth, true)).full
         };
     }
@@ -71,13 +71,14 @@ export default class AuthController {
         if (!(await validateCaptcha(body.turnstileKey)))
             throw new RESTError(ErrorCode.ValidationError, "Invalid captcha");
 
-        const existing = await psqlClient.query(
-            "SELECT id FROM users WHERE username=$1 OR email=$2",
-            [body.username, body.email]
-        );
+        const existing = await prismaClient.user.count({
+            where: {
+                OR: [{ email: body.email }, { username: body.username }]
+            }
+        });
 
         // Check for existing info
-        if (existing.rowCount)
+        if (existing > 0)
             throw new RESTError(ErrorCode.ConflictError, "Username or email already exists");
 
         // Moderate username
@@ -89,26 +90,35 @@ export default class AuthController {
 
         // Add user to database
         const newUserID = Snowflake.generate();
-        await psqlClient.query(
-            "INSERT INTO users (id, username, email, password) VALUES ($1, $2, $3, $4)",
-            [newUserID, body.username, body.email, hashedPassword]
-        );
+        await prismaClient.user.create({
+            data: {
+                id: BigInt(newUserID),
+                username: body.username,
+                email: body.email,
+                password: hashedPassword
+            }
+        });
 
         // Generate confirm email
         const emailConfirmToken = encodeURIComponent(
             randomBytes(60).toString("base64").replace("+", "")
         );
-        await psqlClient.query("INSERT INTO email_verifications (id, token) VALUES ($1, $2)", [
-            newUserID,
-            emailConfirmToken
-        ]);
+        await prismaClient.emailVerification.create({
+            data: {
+                id: BigInt(newUserID),
+                token: emailConfirmToken
+            }
+        });
 
         sendEmail([body.email], "Confirm your nin0chat registration", "7111988", {
             name: body.username,
-            confirm_url: `https://${req.hostname}/api/confirm?token=${emailConfirmToken}`
+            confirm_url: `https://${req.hostname}/api/auth/confirm?token=${emailConfirmToken}`
         });
         if (__DEV__)
-            await psqlClient.query("UPDATE users SET activated=true WHERE id=$1", [newUserID]);
+            await prismaClient.user.update({
+                where: { id: BigInt(newUserID) },
+                data: { activated: true }
+            });
 
         return res.code(201).send();
     }
@@ -130,15 +140,17 @@ export default class AuthController {
     async confirmHandler(req, res) {
         const token = (req.query as any).token;
 
-        // Check if token is valid
-        const query = await psqlClient.query("SELECT id FROM email_verifications WHERE token=$1", [
-            token
-        ]);
-        if (query.rows.length === 0) throw new RESTError(ErrorCode.NotFoundError, "Invalid token");
+        // Check if the token is valid
+        const ticket = await prismaClient.emailVerification.findFirst({ where: { token: token } });
 
-        // Delete token
-        await psqlClient.query("DELETE FROM email_verifications WHERE token=$1", [token]);
-        await psqlClient.query("UPDATE users SET activated=true WHERE id=$1", [query.rows[0].id]);
+        if (!ticket) throw new RESTError(ErrorCode.NotFoundError, "Invalid token");
+
+        // Delete token and activate the user
+        await prismaClient.emailVerification.delete({ where: { token: token } });
+        await prismaClient.user.update({
+            where: { id: ticket.id },
+            data: { activated: true }
+        });
         return res.redirect(`https://${process.env.CLIENT_HOSTNAME}/login?confirmed=true`);
     }
 }
