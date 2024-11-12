@@ -1,0 +1,27 @@
+-- AlterTable
+ALTER TABLE botguilds
+ALTER COLUMN channel_id TYPE BIGINT USING channel_id::BIGINT,
+ALTER COLUMN guild_id TYPE BIGINT USING guild_id::BIGINT;
+
+-- AlterTable
+ALTER TABLE bots
+ALTER COLUMN id TYPE BIGINT USING id::BIGINT,
+ALTER COLUMN owner_id TYPE BIGINT USING owner_id::BIGINT;
+
+-- AlterTable
+ALTER TABLE email_verifications
+ALTER COLUMN id TYPE BIGINT USING id::BIGINT;
+
+-- AlterTable
+ALTER TABLE klines
+ALTER COLUMN user_id TYPE BIGINT USING user_id::BIGINT;
+
+-- AlterTable
+ALTER TABLE tokens
+ALTER COLUMN id TYPE BIGINT USING id::BIGINT;
+
+-- AlterTable
+ALTER TABLE users
+ALTER COLUMN id TYPE BIGINT USING id::BIGINT,
+ALTER COLUMN role TYPE INT USING role::INT;
+ALTER TABLE users RENAME COLUMN pfp TO avatar;

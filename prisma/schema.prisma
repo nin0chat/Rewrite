@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model User {
+  id        BigInt  @id
+  username  String  @unique
+  avatar    String?
+  email     String? @unique
+  password  String?
+  activated Boolean @default(false)
+  role      Int     @default(2)
+  bot       Boolean @default(false)
+  bots      Bot[]   @relation("bot_owner")
+  bot_info  Bot?    @relation("bot_user_connection")
+
+  @@map("users")
+}
+
+model Bot {
+  id       BigInt @id
+  owner_id BigInt
+  owner    User   @relation("bot_owner", fields: [owner_id], references: [id])
+  user     User   @relation("bot_user_connection", fields: [id], references: [id])
+
+  @@map("bots")
+}
+
+model Token {
+  id    BigInt
+  token String
+  seed  String @id
+
+  @@map("tokens")
+}
+
+model EmailVerification {
+  id    BigInt  @id
+  token String? @unique
+
+  @@map("email_verifications")
+}
+
+model KLine {
+  id      Int     @id @default(autoincrement())
+  user_id BigInt?
+  ip      String?
+  reason  String?
+
+  @@map("klines")
+}
+
+// Only used for the bot, not really needed in the backend
+model BotGuild {
+  channel_id BigInt @id
+  guild_id   BigInt
+
+  @@map("botguilds")
+}

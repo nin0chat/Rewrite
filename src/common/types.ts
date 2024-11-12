@@ -1,17 +1,22 @@
+import { User as UserEntity } from "@prisma/client";
+
 export type User = {
-    id: bigint;
+    id: string;
     username: string;
     email?: string;
-    bot: boolean;
     password?: string;
     activated?: boolean;
     role: number;
 };
 
-export const sanitiseUser = (user: User): User => {
-    const { password, ...sanitised } = user;
-
-    return sanitised;
+export const sanitiseUser = (user: UserEntity): User => {
+    return {
+        id: user.id.toString(),
+        username: user.username,
+        email: user.email,
+        activated: user.activated,
+        role: Number(user.role)
+    };
 };
 
 export type Token = {
